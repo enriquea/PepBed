@@ -8,7 +8,7 @@ Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 Depends: R (>= 3.1.0), RColorBrewer,
          dplyr,tidyr,ggplot2,readxl,classInt,
-         scales,pander,GGally,tools
+         scales,pander,GGally,tools, rtracklayer, AnnotationHub
 Imports: tools (>= 3.1.0), 
          RColorBrewer (>= 1.1.0), 
          SDMTools (>= 1.1.0),
