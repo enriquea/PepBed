@@ -1,8 +1,8 @@
 Package: PepBed
 Type: Package
-Title: What the Package Does (Title Case)
+Title: The PepBed is an R-package to analyze peptide based bed and bigBed files. 
 Version: 0.1.0
-Author: Who wrote it
+Author: Yasset Perez-Riverol ypriverol@gmail.com
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
