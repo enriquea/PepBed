@@ -1,4 +1,4 @@
-## Simple wrapper functions to parse bigbed files
+## Simple wrapper functions to parse bigbed/bed files
 
 
 #' Wrapper to convert bigBed to bed files, using UCSC bedToBigBed tool
