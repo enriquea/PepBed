@@ -50,3 +50,4 @@ log/
 target/
 .idea/
 *.Rproj
+.Rproj.user
