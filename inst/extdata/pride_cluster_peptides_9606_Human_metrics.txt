@@ -1,0 +1,40 @@
+version: 4
+hasHeaderExtension: yes
+isCompressed: yes
+isSwapped: 0
+extraIndexCount: 0
+itemCount: 96,581
+primaryDataSize: 2,212,882
+primaryIndexSize: 7,820
+zoomLevels: 10
+chromCount: 25
+	chr1 0 248956422
+	chr10 1 133797422
+	chr11 2 135086622
+	chr12 3 133275309
+	chr13 4 114364328
+	chr14 5 107043718
+	chr15 6 101991189
+	chr16 7 90338345
+	chr17 8 83257441
+	chr18 9 80373285
+	chr19 10 58617616
+	chr2 11 242193529
+	chr20 12 64444167
+	chr21 13 46709983
+	chr22 14 50818468
+	chr3 15 198295559
+	chr4 16 190214555
+	chr5 17 181538259
+	chr6 18 170805979
+	chr7 19 159345973
+	chr8 20 145138636
+	chr9 21 138394717
+	chrM 22 16569
+	chrX 23 156040895
+	chrY 24 57227415
+basesCovered: 71,916,795
+meanDepth (of bases covered): 1.231564
+minDepth: 1.000000
+maxDepth: 44.000000
+std of depth: 0.680655
