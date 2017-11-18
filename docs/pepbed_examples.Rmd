@@ -1,0 +1,124 @@
+---
+title: "PepBed examples"
+date: "November 18, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+### importing bigbed files
+
+```{r , message=FALSE, warning=FALSE}
+
+library(PepBed)
+
+# path to bigbed file
+bigbedpath <- '/home/enrique/temp/pride_cluster_peptides_9606_Human.pogo.bb'
+
+# convert bigbed to bed file (output bed file in the same directory)
+bigbed2bed(inputFile = bigbedpath, compress = FALSE)
+
+# getting basic information (output description file in the same directory)
+getBigBedInfo(inputFile = bigbedpath)
+
+# getting field names if available
+fieldNames <- getBigBedFieldNames(inputFile = bigbedpath, only.names = TRUE)
+
+print(fieldNames)
+```
+
+
+### parsing Bed file
+
+```{r , message=FALSE, warning=FALSE}
+
+# path to bed file
+bedpath <- '/home/enrique/temp/pride_cluster_peptides_9606_Human.bed'
+
+# import bed file as  dataframe
+df <- readBedFile(inputFile = bedpath)
+
+# set column name to bed file
+names(df) <- fieldNames
+
+# convert dataframe to GRanges
+granges_peptide <- buildGRangesFromData(data = df, chrColName = "chrom", startColName = "chromStart", endColName = "chromEnd") 
+
+```
+
+
+### some basic stats
+
+```{r , message=FALSE, warning=FALSE}
+
+# getting number of features(peptides) by chromosome
+counts <- countsByChromosome(gr = granges_peptide)
+print(counts)
+
+# removing duplicated entries from original granges_peptide
+gr_unique <- getUniqueFeatures(granges_peptide, colFeatures = 'name')
+
+# getting unique number of features(peptides) by chromosome
+counts_unique <- countsByChromosome(gr = gr_unique)
+print(counts_unique)
+
+## compute coverage of query (peptide evidences) on subject (transcripts) by crhomosome
+data("protein_coding_transcript") # load protein coding transcript as GRanges object
+coverage <- computeCoverageByChromosome(query = granges_peptide, subject = transcript)
+print(coverage)
+
+```
+
+
+
+### plotting
+
+* The distribution of features (peptides) by chromosome
+
+```{r density, echo=FALSE, fig.width=12, fig.height=12}
+library(circlize)
+circos.initializeWithIdeogram()
+bed <- df
+circos.genomicDensity(bed, baseline = 0)
+circos.clear()
+```
+
+
+* barplot with counts by chromosome
+
+```{r counts, echo=FALSE, fig.width=12, fig.height=8}
+plot1 <- ggplot(counts, aes(x = chromosome, y = countFeatures)) + geom_col() +
+         theme_bw() +
+         theme(panel.grid.major = element_blank(),
+               panel.grid.minor = element_blank(),
+               axis.line = element_line(colour = "black"))
+plot1
+```
+
+
+* barplot with unique counts by chromosome
+
+```{r unique_counts, echo=FALSE, fig.width=12, fig.height=8}
+plot2 <- ggplot(counts_unique, aes(x = chromosome, y = countFeatures)) + geom_col() +
+         theme_bw() +
+         theme(panel.grid.major = element_blank(),
+               panel.grid.minor = element_blank(),
+               axis.line = element_line(colour = "black"))
+plot2
+```
+
+
+* barplot with coverage by chromosome
+
+```{r coverage, echo=FALSE, fig.width=12, fig.height=8}
+plot3 <- ggplot(coverage, aes(x = Chromosome, y = Coverage)) + geom_col() +
+         theme_bw() +
+         theme(panel.grid.major = element_blank(),
+               panel.grid.minor = element_blank(),
+               axis.line = element_line(colour = "black"))
+plot3
+```
+
