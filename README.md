@@ -1,0 +1,56 @@
+# PepBed
+
+## Introduction
+
+PepBed is a R package to process bed and bigBed files from peptide evidences.
+
+## Pre-installation
+
+For some functionalities, pepBed runs internally some tools from UCSC. To install
+the UCSC utilities, follow the instructions [here](https://github.com/ENCODE-DCC/kentUtils).
+
+Alternatively, you could run from terminal the commands below to get installed 
+the requiered binaries (tested on Ubuntu 16.04):
+
+      cd $HOME
+      
+      # make directory
+      mkdir kent-utils
+      
+      cd kent-utils
+      
+      # download binaries from UCSC
+      curl -O http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bigBedToBed
+      curl -O http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bigBedSummary
+      curl -O http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/bigBedInfo
+      
+      # set exec permission
+      chmod -R a+x .
+      
+      # Add the follow line to the .profile file. 
+      # You could need to reboot your system to take effect of the changes.
+      export PATH=$PATH:$HOME/kent-utils
+
+
+Note that for Mac OS system, the binaries can be download from [here](http://hgdownload.soe.ucsc.edu/admin/exe/macOSX.x86_64/).
+
+## Installing pepBed
+
+First we need to install `devtools`:  
+
+      install.packages("devtools")
+      library(devtools)
+   
+Then, we can install the package using: 
+
+      install_github("bigbio/PepBed")
+      library(PepBed)
+
+
+## Examples
+
+Some examples to test the package are provided [here](https://github.com/enriquea/PepBed/docs/pepbed_examples.html). (additional work in process...)
+
+
+
+
