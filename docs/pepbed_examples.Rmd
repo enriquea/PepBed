@@ -1,7 +1,9 @@
 ---
 title: "PepBed examples"
+output:
+  pdf_document: default
+  html_document: default
 date: "November 18, 2017"
-output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -45,34 +47,43 @@ df <- readBedFile(inputFile = bedpath)
 names(df) <- fieldNames
 
 # convert dataframe to GRanges
-granges_peptide <- buildGRangesFromData(data = df, chrColName = "chrom", startColName = "chromStart", endColName = "chromEnd") 
+granges_peptide <- buildGRangesFromData(data = df, chrColName = "chrom", 
+                                                   startColName = "chromStart", 
+                                                   endColName = "chromEnd") 
 
 ```
 
+\newpage
 
 ### some basic stats
 
 ```{r , message=FALSE, warning=FALSE}
-
 # getting number of features(peptides) by chromosome
 counts <- countsByChromosome(gr = granges_peptide)
 print(counts)
+```
 
+\newpage
+
+```{r , message=FALSE, warning=FALSE}
 # removing duplicated entries from original granges_peptide
 gr_unique <- getUniqueFeatures(granges_peptide, colFeatures = 'name')
 
 # getting unique number of features(peptides) by chromosome
 counts_unique <- countsByChromosome(gr = gr_unique)
 print(counts_unique)
+```
 
+\newpage
+
+```{r , message=FALSE, warning=FALSE}
 ## compute coverage of query (peptide evidences) on subject (transcripts) by crhomosome
 data("protein_coding_transcript") # load protein coding transcript as GRanges object
 coverage <- computeCoverageByChromosome(query = granges_peptide, subject = transcript)
 print(coverage)
-
 ```
 
-
+\newpage
 
 ### plotting
 
@@ -86,6 +97,7 @@ circos.genomicDensity(bed, baseline = 0)
 circos.clear()
 ```
 
+\newpage
 
 * barplot with counts by chromosome
 
@@ -98,6 +110,7 @@ plot1 <- ggplot(counts, aes(x = chromosome, y = countFeatures)) + geom_col() +
 plot1
 ```
 
+\newpage
 
 * barplot with unique counts by chromosome
 
@@ -110,6 +123,7 @@ plot2 <- ggplot(counts_unique, aes(x = chromosome, y = countFeatures)) + geom_co
 plot2
 ```
 
+\newpage
 
 * barplot with coverage by chromosome
 
