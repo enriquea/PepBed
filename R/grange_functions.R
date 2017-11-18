@@ -72,6 +72,36 @@ countsByChromosome <- function(gr) {
 }
 
 
+
+#' Get the unique features from the original GRanges object. 
+#'
+#' @param gr GRanges object
+#' @param colFeatures column name of the features
+#' 
+#' @return A GRanges object with unique features. 
+#'   
+#' @author Enrique Audain
+#' 
+#' @export
+#' 
+getUniqueFeatures <- function(gr, colFeatures) {
+      
+     # valid GRanges?
+      if(class(gr) != 'GRanges' | length(gr) == 0){
+        stop('Invalid input GRanges object...')
+      }
+     # column names exist?
+       if(!colFeatures %in% names(mcols(gr))){
+          stop('the specified column do not exist...')
+       }
+      # getting unique features
+      all_features <- mcols(gr)[,colFeatures]
+      gr_unique <- GenomicRanges::subset(gr, !duplicated(all_features))
+     
+     return(gr_unique)
+}
+
+
 #' compute % coverage by chromosome. 
 #'
 #' @param query GRanges object

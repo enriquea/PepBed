@@ -30,13 +30,13 @@ bigbed2bed <- function(inputFile, compress = TRUE, keep.header = TRUE){
        #         # insert header in-place using GNU sed tool
        #         system(paste('sed', '-i', paste("'1 ", "i ", temp, "'", sep = ""), output_bed, sep = '\t'))
        #      }
+               # must the output to be compressed
+              if(compress){
+                system(paste('bgzip', output_bed, '-f', sep = '\t'))
+              } 
   } else {
     message('The output bed file already exists...')
   }
-      # must the output to be compressed
-      if(compress){
-        system(paste('bgzip', output_bed, '-f', sep = '\t'))
-      } 
 }
 
 
