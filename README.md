@@ -49,7 +49,7 @@ Then, we can install the package using:
 
 ## Examples
 
-Some examples to test the package are provided [here](https://github.com/enriquea/PepBed/docs/pepbed_examples.html). (additional work in process...)
+Some examples to test the package are provided [here](https://github.com/enriquea/PepBed/blob/master/docs/pepbed_examples.pdf). (additional work in process...)
 
 
 
