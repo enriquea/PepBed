@@ -59,12 +59,18 @@ pctOverlap = function(query, subject){
 #' 
 #' @export
 #' 
-countsByChromosome <- function(gr) {
-      ## getting seq info
-       rle <- seqnames(gr)
-       if(length(rle) != 0){
+countsByChromosome <- function(gr, colName = 'Peptides') {
+       if(length(gr) != 0){
+         # getting number of elements by chromosome as list...
+         l <- lapply(split(gr, seqnames(gr)), function(x) length(x)) # split by chrom and get lenghts
+         chrs <- names(l)
+         chrs <- gsub(pattern = 'chr', replacement = '', x = chrs, fixed = TRUE)
+         counts <- as.vector(unlist(l))
          ## build dataframe with summary
-         df <- data.frame(chromosome = levels(runValue(rle)), countFeatures = runLength(rle))
+         df <- data.frame(x = as.character(chrs), y = as.numeric(counts))
+         names(df) <- c('Chromosome', colName) # rename df
+         # sort by Chromosome
+             df_ordered <- orderByChromosome(df, colName = 'Chromosome', ref.chr = c(1:22, 'X', 'Y', 'M'))
          return(df)
        } else {
          return(NULL) # print msg here!
@@ -106,6 +112,7 @@ getUniqueFeatures <- function(gr, colFeatures) {
 #'
 #' @param query GRanges object
 #' @param subject GRanges object
+#' @param colName Set column name with coverage values
 #' 
 #' @return percent coverage of \code{query} on \code{subject} by chromosome.
 #'   
@@ -116,7 +123,7 @@ getUniqueFeatures <- function(gr, colFeatures) {
 #' 
 #' @export
 #' 
-computeCoverageByChromosome <- function(query, subject) {
+computeCoverageByChromosome <- function(query, subject, colName) {
   
   # getting sequences (chromosomes) info
   seq_qry <- levels(runValue(seqnames(query)))
@@ -137,5 +144,26 @@ computeCoverageByChromosome <- function(query, subject) {
    
   # build dataframe chr-coverage
   df <- data.frame(Chromosome = seq_qry, Coverage = round(coverage*100, 3))
-  return(df)
+  names(df) <- c('Chromosome', colName) # rename df
+  df$Chromosome <- gsub(pattern = 'chr', replacement = '', x = df$Chromosome, fixed = TRUE)
+  df_ordered <- orderByChromosome(df, colName = 'Chromosome', ref.chr = c(1:22, 'X', 'Y', 'M'))
+  return(df_ordered)
+}
+
+
+
+#' ordering dataframe by crhomosome
+#'
+#' @param df dataframe
+#' @param colName column name with chromosome description
+#' @param ref.chr chromosome order
+#' 
+#' @return Return ordered \code{df} by chromosome.
+#'   
+#' @author Enrique Audain
+#' 
+#' @export
+#' 
+orderByChromosome <- function(df, colName, ref.chr = c(1:22, 'X','Y','M')){
+  return(df[order(match(as.character(df[,colName]), ref.chr)),])
 }
