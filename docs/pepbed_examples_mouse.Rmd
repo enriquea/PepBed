@@ -1,0 +1,214 @@
+---
+title: "PepBed examples (Mouse)"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+date: "November 19, 2017"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Parsing bigbed files
+
+```{r , message=FALSE, warning=FALSE}
+
+library(PepBed)
+
+# path to bigbed file(s)
+bb_path <- '/home/enrique/temp/mouse/pride_cluster_peptides_10090_Mouse_pogo.bb'
+bb_mod_path <- '/home/enrique/temp/mouse/pride_cluster_peptides_10090_Mouse_pogo_ptm.bb'
+
+# convert bigbed to bed file (output bed file in the same directory)
+bigbed2bed(inputFile = bb_path, compress = FALSE)
+bigbed2bed(inputFile = bb_mod_path, compress = FALSE)
+
+# getting basic information (output description file in the same directory)
+getBigBedInfo(inputFile = bb_path)
+getBigBedInfo(inputFile = bb_mod_path)
+
+# getting field names if available
+fieldNames <- getBigBedFieldNames(inputFile = bb_path, only.names = TRUE)
+
+print(fieldNames)
+```
+
+\newpage
+
+### Parsing Bed file
+
+```{r , message=FALSE, warning=FALSE}
+
+# path to bed file(s)
+bed_path <- '/home/enrique/temp/mouse/pride_cluster_peptides_10090_Mouse_pogo.bed'
+bed_mod_path <- '/home/enrique/temp/mouse/pride_cluster_peptides_10090_Mouse_pogo_ptm.bed'
+
+# import bed file as  dataframe
+bed_df <- readBedFile(inputFile = bed_path)
+bed_mod_df <- readBedFile(inputFile = bed_mod_path)
+
+# set column name to bed file
+names(bed_df) <- fieldNames
+names(bed_mod_df) <- fieldNames
+
+# convert dataframe to GRanges
+# all non-modified peptides
+granges_peptide <- buildGRangesFromData(data = bed_df, 
+                                        chrColName = "chrom", 
+                                        startColName = "chromStart", 
+                                        endColName = "chromEnd") 
+
+# all modified peptides
+granges_mod_peptide <- buildGRangesFromData(data = bed_mod_df, 
+                                            chrColName = "chrom", 
+                                            startColName = "chromStart", 
+                                            endColName = "chromEnd") 
+```
+
+\newpage
+
+### Computing some basic stats from the data
+
+```{r , message=FALSE, warning=FALSE}
+# getting number of features(peptides) by chromosome
+counts <- countsByChromosome(gr = granges_peptide, colName = 'Peptides')
+counts_mod <- countsByChromosome(gr = granges_mod_peptide, colName = 'Peptides_mod')
+
+# merging dfs
+merged_counts <- merge.data.frame(counts, counts_mod, by = 'Chromosome')
+# ordering by chromosome
+merged_counts <- orderByChromosome(df = merged_counts, colName = 'Chromosome')
+
+print(merged_counts)
+```
+
+\newpage
+
+### Getting stats for unique peptides
+
+```{r , message=FALSE, warning=FALSE}
+# removing duplicated entries from original granges_peptide
+unique_pep <- getUniqueFeatures(granges_peptide, colFeatures = 'name')
+unique_pep_mod <- getUniqueFeatures(granges_mod_peptide, colFeatures = 'name')
+
+# getting unique number of features(peptides) by chromosome
+counts_unique <- countsByChromosome(gr = unique_pep, colName = 'Peptides')
+counts_mod_unique <- countsByChromosome(gr = unique_pep_mod, colName = 'Peptides_mod')
+
+# merging dfs
+merged_counts_unique <- merge.data.frame(counts_unique, 
+                                         counts_mod_unique, 
+                                         by = 'Chromosome')
+
+# ordering by chromosome
+merged_counts_unique <- orderByChromosome(df = merged_counts_unique, 
+                                          colName = 'Chromosome')
+
+print(merged_counts_unique)
+```
+
+\newpage
+
+### Computing % coverage
+
+```{r , message=FALSE, warning=FALSE}
+## compute coverage of query (peptide evidences) on subject (transcripts) by crhomosome
+data("protein_coding_transcript_mm10") # load protein coding transcript as GRanges object
+
+coverage <- computeCoverageByChromosome(query = granges_peptide, 
+                                        subject = transcripts_mm10, 
+                                        colName = 'Coverage')
+
+coverage_mod <- computeCoverageByChromosome(query = granges_mod_peptide, 
+                                            subject = transcripts_mm10,
+                                            colName = 'Coverage_mod')
+
+# merging dfs
+merged_coverage <- merge.data.frame(coverage, coverage_mod, by = 'Chromosome')
+
+# ordering by chromosome
+merged_coverage <- orderByChromosome(df = merged_coverage, colName = 'Chromosome')
+
+print(merged_coverage)
+```
+
+\newpage
+
+### Visualizing the data
+
+* The distribution of peptides by chromosome. (blue_track: modified peptide;  red_track: non-modified)
+
+```{r density, echo=FALSE, fig.width=12, fig.height=12}
+library(circlize)
+circos.initializeWithIdeogram(species = 'mm10')
+bed <- bed_df
+bed_mod <- bed_mod_df
+circos.genomicDensity(bed, col = c("#FF000080"), track.height = 0.1, baseline = 0)
+circos.genomicDensity(bed_mod, col = c("#0000FF80"), track.height = 0.1, baseline = 0)
+circos.clear()
+```
+
+\newpage
+
+* barplot with number of peptides (modified and non-modified) by chromosome
+
+```{r counts, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8}
+
+dat <- reshape2::melt(merged_counts)
+
+plot1 <- ggplot(dat, aes(x = factor(Chromosome, levels = unique(dat$Chromosome)), y = value, fill=variable)) + 
+         geom_col(position = 'dodge', alpha = 0.7) +
+         labs(x = 'Chromosome', y = 'Number of Peptides', fill = '') +
+         scale_fill_discrete("Peptides", labels=c("non-modified", "modified")) +
+         theme_bw() +
+         theme(axis.text = element_text(size=12),
+               axis.title = element_text(size=14),
+               panel.grid.major = element_blank(),
+               panel.grid.minor = element_blank(),
+               axis.line = element_line(colour = "black"))
+plot1
+```
+
+\newpage
+
+* barplot with number of unique peptides (modified and non-modified) by chromosome
+
+```{r unique_counts, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8}
+
+dat <- reshape2::melt(merged_counts_unique)
+
+plot2 <- ggplot(dat, aes(x = factor(Chromosome, levels = unique(dat$Chromosome)), y = value, fill=variable)) + 
+         geom_col(position = 'dodge', alpha = 0.7) +
+         labs(x = 'Chromosome', y = 'Number of Peptides', fill = '') +
+         scale_fill_discrete("Unique peptides", labels=c("non-modified", "modified")) +
+         theme_bw() +
+         theme(axis.text = element_text(size=12),
+               axis.title = element_text(size=14),
+               panel.grid.major = element_blank(),
+               panel.grid.minor = element_blank(),
+               axis.line = element_line(colour = "black"))
+plot2
+```
+
+\newpage
+
+* barplot with coverage (all peptides) by chromosome
+
+```{r coverage, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8}
+
+dat <- coverage
+
+plot3 <- ggplot(dat, aes(x = factor(Chromosome, levels = unique(dat$Chromosome)), y = Coverage)) + 
+         geom_col(fill='darkgreen', alpha=0.4) +
+         labs(x = 'Chromosome', y = '% coverage', fill = '') +
+         theme_bw() +
+         theme(axis.text = element_text(size=12),
+               axis.title = element_text(size=14),
+               panel.grid.major = element_blank(),
+               panel.grid.minor = element_blank(),
+               axis.line = element_line(colour = "black"))
+plot3
+```
+
