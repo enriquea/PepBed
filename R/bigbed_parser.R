@@ -15,7 +15,7 @@
 bigbed2bed <- function(inputFile, compress = TRUE, keep.header = TRUE){
   
   # set output bedfile name path
-  output_bed <- paste0(strsplit(inputFile,'\\.')[[1]][1], '.bed')
+  output_bed <- paste0(sub(pattern = "(.*)\\..*$", replacement = "\\1", inputFile),'.bed')
   
   # invoke cmd line tool bigbedtobed 
   if (!file.exists(output_bed)) {
@@ -54,7 +54,7 @@ bigbed2bed <- function(inputFile, compress = TRUE, keep.header = TRUE){
 getBigBedInfo <- function(inputFile) {
   
   # set output file path for basic metrics
-  output_file <- paste0(strsplit(inputFile,'\\.')[[1]][1], '_metrics', '.txt')
+  output_file <- paste0(sub(pattern = "(.*)\\..*$", replacement = "\\1", inputFile),'_metrics.txt')
   
   # invoke cmd line tool bigBedInfo
   if (!file.exists(output_file)) {
