@@ -1,0 +1,136 @@
+---
+title: "PepBed examples (Human)"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+date: "November 19, 2017"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Parsing bigbed files
+
+```{r , message=FALSE, warning=FALSE}
+
+library(PepBedR)
+
+```
+
+\newpage
+
+### Parsing Bed file
+
+```{r , message=FALSE, warning=FALSE}
+
+# path to bed file(s)
+bed_path <- '/Users/yperez/IdeaProjects/github-repo/BDP/benchmark/ensembl/GRCh38/PepGenome-Peptide-Atlas.bed'
+
+# import bed file as  dataframe
+bed_df <- readBedFile(inputFile = bed_path)
+bed_df <- setBed12Columns(bed_df)
+
+# convert dataframe to GRanges
+# all non-modified peptides
+granges_peptide <- buildGRangesFromData(data = bed_df, 
+                                        chrColName = "chrom", 
+                                        startColName = "chromStart", 
+                                        endColName = "chromEnd") 
+
+```
+
+\newpage
+
+### Computing some basic stats from the data
+
+```{r , message=FALSE, warning=FALSE}
+# getting number of features(peptides) by chromosome
+counts <- countsByChromosome(gr = granges_peptide, colName = 'Peptides')
+print(counts)
+```
+
+\newpage
+
+### Getting stats for unique peptides
+
+```{r , message=FALSE, warning=FALSE}
+# removing duplicated entries from original granges_peptide
+unique_pep <- getUniqueFeatures(granges_peptide, colFeatures = 'name')
+
+# getting unique number of features(peptides) by chromosome
+counts_unique <- countsByChromosome(gr = unique_pep, colName = 'Peptides')
+
+print(counts_unique)
+```
+
+\newpage
+
+### Computing % coverage
+
+```{r , message=FALSE, warning=FALSE}
+## compute coverage of query (peptide evidences) on subject (transcripts) by crhomosome
+data("protein_coding_transcript_hg38") # load protein coding transcript as GRanges object
+
+coverage <- computeCoverageByChromosome(query = granges_peptide, 
+                                        subject = transcripts_hg38, colName = 'Coverage')
+
+print(coverage)
+```
+
+\newpage
+
+### Visualizing the data
+
+* The distribution of peptides by chromosome. (red_track: peptides)
+
+```{r density, echo=FALSE, fig.width=12, fig.height=12}
+library(circlize)
+circos.initializeWithIdeogram(species = 'hg19')
+bed <- bed_df
+circos.genomicDensity(bed, col = c("#FF000080"), track.height = 0.1, baseline = 0)
+circos.clear()
+```
+
+\newpage
+
+* barplot with number of peptides by chromosome
+
+```{r counts, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8}
+
+dat <- coverage
+
+plot1 <- ggplot(dat, aes(x = factor(Chromosome, levels = unique(dat$Chromosome)), y = value, fill=variable)) + 
+         geom_col(position = 'dodge', alpha = 0.7) +
+         labs(x = 'Chromosome', y = 'Number of Peptides', fill = '') +
+         scale_fill_discrete("Peptides", labels=c("non-modified", "modified")) +
+         theme_bw() +
+         theme(axis.text = element_text(size=12),
+               axis.title = element_text(size=14),
+               panel.grid.major = element_blank(),
+               panel.grid.minor = element_blank(),
+               axis.line = element_line(colour = "black"))
+plot1
+```
+
+\newpage
+
+* barplot with coverage (all peptides) by chromosome
+
+```{r coverage, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8}
+
+dat <- coverage
+
+plot3 <- ggplot(dat, aes(x = factor(Chromosome, levels = unique(dat$Chromosome)), y = Coverage)) + 
+         geom_col(fill='darkgreen', alpha=0.4) +
+         labs(x = 'Chromosome', y = '% coverage', fill = '') +
+         theme_bw() +
+         theme(axis.text = element_text(size=12),
+               axis.title = element_text(size=14),
+               panel.grid.major = element_blank(),
+               panel.grid.minor = element_blank(),
+               axis.line = element_line(colour = "black"))
+plot3
+```
+

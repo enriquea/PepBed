@@ -1,6 +1,6 @@
-Package: PepBed
+Package: PepBedR
 Type: Package
-Title: The PepBed is an R-package to analyze peptide based Bed and bigBed files. 
+Title: The PepBedR is an R-package to analyze peptide based Bed and bigBed files. 
 Version: 0.1.0
 Author: Yasset Perez-Riverol <ypriverol@gmail.com>
 Maintainer: Yasset Perez-Riverol <ypriverol@gmail.com>

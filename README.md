@@ -1,12 +1,12 @@
-# PepBed
+# PepBedR
 
 ## Introduction
 
-PepBed is a R package to process bed and bigBed files from peptide evidences.
+PepBedR: is a R package to process bed and bigBed files from peptide evidences.
 
 ## Pre-installation
 
-For some functionalities, pepBed runs internally some tools from UCSC. To install
+For some functionalities, PepBedR runs internally some tools from UCSC. To install
 the UCSC utilities, follow the instructions [here](https://github.com/ENCODE-DCC/kentUtils).
 
 Alternatively, you could run from terminal the commands below to get installed 
@@ -43,13 +43,13 @@ First we need to install `devtools`:
    
 Then, we can install the package using: 
 
-      install_github("bigbio/PepBed")
-      library(PepBed)
+      install_github("bigbio/PepBedR")
+      library(PepBedR)
 
 
 ## Examples
 
-Some examples to test the package are provided [here](https://github.com/enriquea/PepBed/blob/master/docs/pepbed_examples_human.pdf). (additional work in process...)
+Some examples to test the package are provided [here](https://github.com/bigbio/PepBedR/blob/master/docs/pepbed_examples_human.pdf). (additional work in process...)
 
 
 
