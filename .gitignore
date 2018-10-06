@@ -4,7 +4,8 @@
 *.o
 *.so
 hdfs/*
-
+*.log
+*.RData
 
 # Packages #
 ############
