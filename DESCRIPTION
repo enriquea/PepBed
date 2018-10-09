@@ -16,7 +16,7 @@ Imports: tools (>= 3.1.0),
          data.table, tidyr, tools, ggplot2, readxl, reshape2
 Suggests: circlize, RUnit, bibtex, knitcitations (>= 1.0-1), knitr
 License: Apache 2
-URL: https://github.com/bigbio/PepBed
+URL: https://github.com/bigbio/PepBedR
 BugReports: https://github.com/bigbio/PepBed/issues
 VignetteBuilder: knitr
 biocViews: Genomics, Proteomics, Multiomics
