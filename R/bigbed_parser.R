@@ -115,8 +115,17 @@ getBigBedFieldNames <- function(inputFile, only.names = TRUE) {
 readBedFile <- function(inputFile, header = FALSE){
           bed_df <- data.table::fread(input = inputFile, 
                                       header = header, 
-                                      data.table = FALSE)
+                                      data.table = FALSE,
+                                      fill = TRUE,
+                                      sep = '\t',
+                                      quote = '')
           return(bed_df)
+}
+
+
+importBEDasGRange <- function(inputFile){
+         grange <- rtracklayer::import.bed(rtracklayer::BEDFile(inputFile))
+  return(grange)
 }
 
 
