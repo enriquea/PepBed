@@ -6,12 +6,22 @@ Author: Yasset Perez-Riverol <ypriverol@gmail.com>
 Maintainer: Yasset Perez-Riverol <ypriverol@gmail.com>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-Depends: R (>= 3.1.0), RColorBrewer,
-         dplyr,tidyr,ggplot2,readxl,classInt, GenomicRanges, plyr,
-         scales,pander,GGally,tools, rtracklayer, AnnotationHub, circlize
+Depends: R (>= 3.1.0), 
+         RColorBrewer,
+         dplyr,
+         tidyr,
+         ggplot2,
+         readxl,
+         GenomicRanges, 
+         plyr,
+         scales,
+         pander,
+         GGally,
+         tools,
+         rtracklayer,
+         circlize
 Imports: tools (>= 3.1.0), 
-         RColorBrewer (>= 1.1.0), 
-         SDMTools (>= 1.1.0),
+         RColorBrewer (>= 1.1.0),
          readxl,
          data.table, tidyr, tools, ggplot2, readxl, reshape2
 Suggests: circlize, RUnit, bibtex, knitcitations (>= 1.0-1), knitr

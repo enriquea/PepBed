@@ -1,0 +1,82 @@
+---
+title: "PepBedR report"
+date: "`r format(Sys.Date(), '%d %B, %Y')`" 
+output:
+  pdf_document: default
+  html_document: default
+  fig_caption: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r variables, include=FALSE}
+
+# define all requiered variables
+peptide_counts_table <- counts
+unique_peptide_counts_table <- counts_unique
+coverage_table <- coverage
+coverage_barplot <- plot
+circos_plot_path <- temporal_file
+
+```
+
+<style type="text/css">
+.table {
+    width: 50%;
+}
+</style>
+
+## Summary of peptide counts per chromosome.
+
+\footnotesize
+
+```{r, results='asis', echo=FALSE}
+
+  pander::pandoc.table(peptide_counts_table, digits = 4,  split.table = Inf,
+                       caption = 'Number of peptides per chromosome.')
+
+```
+
+\newpage
+
+## Summary of unique peptide counts per chromosome.
+
+```{r, results='asis', echo=FALSE}
+
+  pander::pandoc.table(unique_peptide_counts_table, digits = 4,  split.table = Inf,
+                       caption = 'Number of unique peptides per chromosome.')
+
+```
+
+
+\newpage
+
+## Summary of coverage percentage per chromosome.
+
+```{r, results='asis', echo=FALSE}
+
+  pander::pandoc.table(coverage_table, digits = 4,  split.table = Inf,
+                       caption = 'Coverage (%) at transcript level.')
+
+```
+
+\newpage
+
+## Plots
+
+### Transcript coverage percentage per chromosome
+
+```{r, fig.width=14, fig.height=10, dev='png', echo=FALSE, results='hide'}
+   coverage_barplot
+```
+
+\newpage
+
+```{r, echo=FALSE, fig.width=14, fig.height=14, fig.cap='Circular plot. Peptide distribution per crhomosome.', out.width='100%'}
+   
+knitr::include_graphics(path = circos_plot_path)
+
+```
