@@ -139,8 +139,8 @@ computeCoverageByChromosome <- function(query, subject, colName) {
   coverage <- vector()
   for (i in 1:length(seq_qry)){
     chrom <- seq_qry[i]
-    coverage[i] <- pctOverlap( query =  GenomicRanges::subset(query, seqnames(query) == chrom),
-                               subject = GenomicRanges::subset(subject, seqnames(subject) == chrom))
+    coverage[i] <- pctOverlap( query =  subset(query, seqnames(query) == chrom),
+                               subject = subset(subject, seqnames(subject) == chrom))
   }
 
   # build dataframe chr-coverage
