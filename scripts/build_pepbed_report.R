@@ -15,4 +15,4 @@ Options:
 
 opts <- docopt(doc)
 
-PepBed::generate_pepbed_report(bedfile = opts$i, ref_genome = opts$ref, output_file = opts$o)
+PepBedR::generate_pepbed_report(bedfile = opts$i, ref_genome = opts$ref, output_file = opts$o)
