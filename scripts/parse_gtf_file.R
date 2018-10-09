@@ -17,6 +17,11 @@ genes_hg38 <- subset(gtf, GenomicRanges::mcols(gtf)$type == 'gene' & GenomicRang
 ## save protein coding genes as GRanges
 save(genes_hg38, file = 'data/protein_coding_genes_hg38.rda')
 
+## getting "all exons" from protein-coding transcripts
+exons_hg38 <- subset(gtf, GenomicRanges::mcols(gtf)$type == 'exon' & GenomicRanges::mcols(gtf)$transcript_type == 'protein_coding')
+
+## save protein coding exons (and isoforms) as GRanges (~700,000 exons)
+save(exons_hg38, file = 'data/protein_coding_exons_hg38.rda')
 
 ################################################ downloading/parsing GTF file for mouse (mm10) ##############################################################
 
