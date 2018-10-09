@@ -95,27 +95,6 @@ circos.clear()
 
 \newpage
 
-* barplot with number of peptides by chromosome
-
-```{r counts, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8}
-
-dat <- coverage
-
-plot1 <- ggplot(dat, aes(x = factor(Chromosome, levels = unique(dat$Chromosome)), y = value, fill=variable)) + 
-         geom_col(position = 'dodge', alpha = 0.7) +
-         labs(x = 'Chromosome', y = 'Number of Peptides', fill = '') +
-         scale_fill_discrete("Peptides", labels=c("non-modified", "modified")) +
-         theme_bw() +
-         theme(axis.text = element_text(size=12),
-               axis.title = element_text(size=14),
-               panel.grid.major = element_blank(),
-               panel.grid.minor = element_blank(),
-               axis.line = element_line(colour = "black"))
-plot1
-```
-
-\newpage
-
 * barplot with coverage (all peptides) by chromosome
 
 ```{r coverage, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8}
@@ -134,3 +113,8 @@ plot3 <- ggplot(dat, aes(x = factor(Chromosome, levels = unique(dat$Chromosome))
 plot3
 ```
 
+```{r coverage, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8}
+library(Sushi)
+plotManhattan(bedfile=bed_path,cex=0.75)
+
+```
