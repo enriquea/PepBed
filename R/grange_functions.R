@@ -103,7 +103,7 @@ getUniqueFeatures <- function(gr, colFeatures) {
        }
       # getting unique features
       all_features <- mcols(gr)[,colFeatures]
-      gr_unique <- GenomicRanges::subset(gr, !duplicated(all_features))
+      gr_unique <- gr[gr, !duplicated(all_features)]
      
      return(gr_unique)
 }
@@ -139,8 +139,8 @@ computeCoverageByChromosome <- function(query, subject, colName) {
   coverage <- vector()
   for (i in 1:length(seq_qry)){
     chrom <- seq_qry[i]
-    coverage[i] <- pctOverlap( query =  GenomicRanges::subset(query, seqnames(query) == chrom), 
-                               subject = GenomicRanges::subset(subject, seqnames(subject) == chrom))
+    coverage[i] <- pctOverlap( query =  query[seqnames(query) == chrom], 
+                               subject = subject[seqnames(subject) == chrom])
   }
    
   # build dataframe chr-coverage
