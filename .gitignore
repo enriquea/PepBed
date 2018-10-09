@@ -51,3 +51,7 @@ target/
 .idea/
 *.Rproj
 .Rproj.user
+
+# Extra directory to ignore #
+#####################
+analysis/
