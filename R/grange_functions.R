@@ -103,7 +103,7 @@ getUniqueFeatures <- function(gr, colFeatures) {
        }
       # getting unique features
       all_features <- mcols(gr)[,colFeatures]
-      gr_unique <- gr[gr, !duplicated(all_features)]
+      gr_unique <- gr[!duplicated(all_features)]
      
      return(gr_unique)
 }
