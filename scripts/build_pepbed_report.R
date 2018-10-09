@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 require(docopt)
-require(PepBed)
+require(PepBedR)
 
 'Usage:
 build_pepbed_report.R [-i <input> -ref <genome reference> -o <output>]
