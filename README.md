@@ -1,4 +1,6 @@
-# PepBedR
+PepBedR
+=====================
+<img src="https://img.shields.io/badge/R%3D-3.4.2-6666ff.svg" alt="minimal R version">
 
 ## Introduction
 
