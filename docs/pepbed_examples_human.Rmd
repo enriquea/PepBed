@@ -18,8 +18,9 @@ knitr::opts_chunk$set(echo = TRUE)
 library(PepBed)
 
 # path to bigbed file(s)
-bb_path <- '/home/biolinux/temp/human/pride_cluster_peptides_9606_Human_pogo.bb'
-bb_mod_path <- '/home/biolinux/temp/human/pride_cluster_peptides_9606_Human_pogo_ptm.bb'
+bb_path <- '/media/enrique/F2BCD3B6BCD37417/ebi/pride/data/proteogenomics/latest/archive/PXD001428/hg38/PXD001428-9606.pogo.bb'
+bb_mod_path <- '/media/enrique/F2BCD3B6BCD37417/ebi/pride/data/proteogenomics/latest/archive/PXD001428/hg38/PXD001428-9606.pogo.bb'
+
 
 # convert bigbed to bed file (output bed file in the same directory)
 bigbed2bed(inputFile = bb_path, compress = FALSE)
@@ -42,8 +43,8 @@ print(fieldNames)
 ```{r , message=FALSE, warning=FALSE}
 
 # path to bed file(s)
-bed_path <- '/home/biolinux/temp/human/pride_cluster_peptides_9606_Human_pogo.bed'
-bed_mod_path <-  '/home/biolinux/temp/human/pride_cluster_peptides_9606_Human_pogo_ptm.bed'
+bed_path <- '/media/enrique/F2BCD3B6BCD37417/ebi/pride/data/proteogenomics/latest/archive/PXD001428/hg38/PXD001428-9606.pogo.bed'
+bed_mod_path <-  '/media/enrique/F2BCD3B6BCD37417/ebi/pride/data/proteogenomics/latest/archive/PXD001428/hg38/PXD001428-9606.pogo.bed'
 
 # import bed file as  dataframe
 bed_df <- readBedFile(inputFile = bed_path)
